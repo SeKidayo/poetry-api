@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 朝代
+model dynasty {
+  dynasty_id  String   @id @default(uuid())
+  name        String   @unique @db.VarChar(20)
+  start_year  Int
+  end_year    Int
+}
+
+// 作者
+model author {
+  author_id   String   @id @default(uuid())
+  name        String   @unique @db.VarChar(50)
+  intro       String   @db.Text
+  dynasty_id  String
+}
+
+// 词牌
+model cipai {
+  cipai_id    String   @id @default(uuid())
+  name        String   @unique @db.VarChar(50)
+  intro       String   @db.Text
+  dynasty_id  String?
+}
+
+// 诗词
+model poem {
+  poem_id     String   @id @default(uuid())
+  title       String?  @db.VarChar(100)
+  cipai_id    String?
+  subtitle    String?  @db.VarChar(100)
+  content     String   @db.Text
+  style       String   @db.VarChar(2)
+  dynasty_id  String
+  author_id   String
+}
